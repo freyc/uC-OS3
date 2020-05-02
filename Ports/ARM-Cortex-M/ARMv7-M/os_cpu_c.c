@@ -499,9 +499,9 @@ CPU_STK  *OSTaskStkInit (OS_TASK_PTR    p_task,
     *(--p_stk) = (CPU_STK)0x04040404uL;                         /* R4                                                   */
 
     if(opt & OS_OPT_TASK_PRIV) {
-        *(--p_stk) = (CPU_STK)0x00000002uL;                         /* CONTROL                                              */
+        *(p_stk - 1) = (CPU_STK)0x00000002uL;                         /* CONTROL                                              */
     } else {
-        *(--p_stk) = (CPU_STK)0x00000003uL;                         /* CONTROL                                              */
+        *(p_stk - 1) = (CPU_STK)0x00000003uL;                         /* CONTROL                                              */
     }
 
 #if (OS_CPU_ARM_FP_EN > 0u)
