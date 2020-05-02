@@ -37,6 +37,10 @@
 
 #define  OS_VERSION  30800u                       /* Version of uC/OS-III (Vx.yy.zz mult. by 10000)                   */
 
+#ifndef OS_DISABLE_WRAPPERS
+#define OSTimeDlyHMSM OSTimeDlyHMSM_User
+#endif
+
 /*
 ************************************************************************************************************************
 *                                                 INCLUDE HEADER FILES

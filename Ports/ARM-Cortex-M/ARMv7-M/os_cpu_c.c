@@ -728,6 +728,32 @@ void  OS_CPU_SysTickInit (CPU_INT32U  cnts)
 #endif
 }
 
+void OS_CPU_SVCHandler_C(void* pc, CPU_INT08U svcall) {
+    extern void* __privileged_code_start__[];
+    extern void* __privileged_code_end__[];
+    CPU_INT32U ctrl;
+
+    if (pc <  __privileged_code_start__ || 
+        pc >= __privileged_code_end__) {
+        return;
+    }
+
+    switch(svcall) {
+        case 1:
+            ctrl = CPU_GetControl();
+            ctrl &= ~0x01;
+            CPU_SetControl(ctrl);
+            break;
+        case 2:
+            ctrl = CPU_GetControl();
+            ctrl |= 0x01;
+            CPU_SetControl(ctrl);
+            break;
+        default:
+        break;
+    }
+}
+
 #ifdef __cplusplus
 }
 #endif

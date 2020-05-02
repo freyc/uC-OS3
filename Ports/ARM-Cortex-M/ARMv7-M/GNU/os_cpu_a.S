@@ -39,12 +39,14 @@
     .extern  OSTaskSwHook
     .extern  OS_CPU_ExceptStkBase
     .extern  OS_KA_BASEPRI_Boundary
+    .extern  OS_CPU_SVCHandler_C
 
 
     .global  OSStartHighRdy                                     @ Functions declared in this file
     .global  OSCtxSw
     .global  OSIntCtxSw
     .global  OS_CPU_PendSVHandler
+    .global  OS_CPU_SVCHandler
 
 #if (defined(__VFP_FP__) && !defined(__SOFTFP__))
     .global  OS_CPU_FP_Reg_Push
@@ -307,5 +309,19 @@ OS_CPU_PendSVHandler:
     MOV     R2, #0                                              @ Restore BASEPRI priority level to 0
     MSR     BASEPRI, R2
     BX      LR                                                  @ Exception return will restore remaining context
+
+.thumb_func
+OS_CPU_SVCHandler:
+    TST     LR, #4
+    ITE     EQ
+    MRSEQ   R0, msp
+    MRSNE   R0, psp
+    LDR     R0, [R0, #24]
+    SUB     R0, R0, #2
+    LDRB    R1, [R0]
+    STMFD   SP!, {LR}
+    BL      OS_CPU_SVCHandler_C
+    LDMFD   SP!, {LR}
+    BX      LR
 
 .end
