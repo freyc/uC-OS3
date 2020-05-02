@@ -284,6 +284,7 @@ extern "C" {
 #define  OS_OPT_TASK_STK_CLR                 (OS_OPT)(0x0002u)  /* Clear the stack when the task is create            */
 #define  OS_OPT_TASK_SAVE_FP                 (OS_OPT)(0x0004u)  /* Save the contents of any floating-point registers  */
 #define  OS_OPT_TASK_NO_TLS                  (OS_OPT)(0x0008u)  /* Specifies the task DOES NOT require TLS support    */
+#define  OS_OPT_TASK_PRIV                    (OS_OPT)(0x0010u)  /* Specifies the task should be run in privileged mode*/
 
 /*
 ------------------------------------------------------------------------------------------------------------------------

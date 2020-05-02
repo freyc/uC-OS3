@@ -564,7 +564,7 @@ void  OS_StatTaskInit (OS_ERR  *p_err)
                   0u,
                   0u,
                  (void       *)0,
-                 (OS_OPT_TASK_STK_CHK | OS_OPT_TASK_STK_CLR),
+                 (OS_OPT_TASK_PRIV | OS_OPT_TASK_STK_CHK | OS_OPT_TASK_STK_CLR),
                   p_err);
 }
 

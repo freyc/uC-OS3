@@ -353,6 +353,8 @@ void  OSTaskReturnHook (OS_TCB  *p_tcb)
 *                    +-------------+       +-------------+
 *                    |    R4       |       |     R4      |
 *                    +-------------+       +-------------+
+*                    |   CONTROL   |       |   CONTROL   |
+*                    +-------------+       +-------------+
 *                          (a)             |     S31     |
 *                                          +-------------+
 *                                          |     S30     |
@@ -495,6 +497,12 @@ CPU_STK  *OSTaskStkInit (OS_TASK_PTR    p_task,
     *(--p_stk) = (CPU_STK)0x06060606uL;                         /* R6                                                   */
     *(--p_stk) = (CPU_STK)0x05050505uL;                         /* R5                                                   */
     *(--p_stk) = (CPU_STK)0x04040404uL;                         /* R4                                                   */
+
+    if(opt & OS_OPT_TASK_PRIV) {
+        *(--p_stk) = (CPU_STK)0x00000002uL;                         /* CONTROL                                              */
+    } else {
+        *(--p_stk) = (CPU_STK)0x00000003uL;                         /* CONTROL                                              */
+    }
 
 #if (OS_CPU_ARM_FP_EN > 0u)
                                                                 /* Initialize S16-S31 floating point registers          */

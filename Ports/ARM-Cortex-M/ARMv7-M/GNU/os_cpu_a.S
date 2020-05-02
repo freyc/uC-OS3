@@ -185,7 +185,8 @@ OSStartHighRdy:
     MSR     CONTROL, R0
     ISB                                                         @ Sync instruction stream
 
-    LDMFD    SP!, {R4-R11, LR}                                  @ Restore r4-11, lr from new process stack
+    LDMFD    SP!, {R3-R11, LR}                                  @ Restore r4-11, lr from new process stack
+    MSR      CONTROL, R3                                        @ Restore CONTROL register
     LDMFD    SP!, {R0-R3}                                       @ Restore r0, r3
     LDMFD    SP!, {R12, LR}                                     @ Load R12 and LR
     LDMFD    SP!, {R1, R2}                                      @ Load PC and discard xPSR
@@ -273,7 +274,8 @@ OS_CPU_PendSVHandler:
     CPSIE   I
 
     MRS     R0, PSP                                             @ PSP is process stack pointer
-    STMFD   R0!, {R4-R11, R14}                                  @ Save remaining regs r4-11, R14 on process stack
+    MRS     R3, CONTROL                                         @ Save current CONTROL register
+    STMFD   R0!, {R3-R11, R14}                                  @ Save remaining regs r4-11, R14 on process stack
 
     MOVW    R5, #:lower16:OSTCBCurPtr                           @ OSTCBCurPtr->StkPtr = SP;
     MOVT    R5, #:upper16:OSTCBCurPtr
@@ -298,7 +300,8 @@ OS_CPU_PendSVHandler:
 
     ORR     LR,  R4, #0x04                                      @ Ensure exception return uses process stack
     LDR     R0, [R2]                                            @ R0 is new process SP; SP = OSTCBHighRdyPtr->StkPtr;
-    LDMFD   R0!, {R4-R11, R14}                                  @ Restore r4-11, R14 from new process stack
+    LDMFD   R0!, {R3-R11, R14}                                  @ Restore r4-11, R14 from new process stack
+    MSR     CONTROL, R3
     MSR     PSP, R0                                             @ Load PSP with new process SP
 
     MOV     R2, #0                                              @ Restore BASEPRI priority level to 0
